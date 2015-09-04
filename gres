@@ -1,0 +1,81 @@
+#!/usr/bin/env ruby
+
+require 'find'
+
+# Globally search for a Regular Expression and Substitute
+class GRES
+  def initialize(first_arg, second_arg, third_arg)
+    
+    flags = ["-v"]
+    
+    if flags.any? { |flag| first_arg[flag] }
+      substitution_string = second_arg.to_s.split("\\")
+      @path               = third_arg.to_s
+      
+      case first_arg
+      when "-v"
+        @verbose = true
+      end
+    else
+      substitution_string = first_arg.to_s.split("\\")
+      @path               = second_arg.to_s
+    end
+    
+    @orig_string = substitution_string[1]
+    @new_string  = substitution_string[2]
+    
+    if @verbose
+      puts "Replacing all occurrences of \"#@orig_string\" in \"#@path\"..."
+    end
+    
+    if File.directory?(@path)
+      Find.find("#@path") do |file|
+        replace_lines_in file unless File.directory?(file)
+      end
+    else
+      replace_lines_in @path
+    end
+    
+    if @verbose && !@occurrences
+      puts "No occurrences to replace found in \"#@path\"."
+    end
+  end
+  
+  def replace_lines_in(file)
+    new_file_contents = File.readlines(file)
+    
+    new_file_contents.each do |line|
+      current_line = new_file_contents[new_file_contents.index(line)]
+      line_number  = new_file_contents.index(line) + 1
+      
+      if current_line.include?(@orig_string)
+        @occurrences = true
+        
+        if @verbose
+          puts "Occurrence found in \"#{file}\" at line #{line_number}."
+          print "Replacing line #{line_number}'s occurrence of \"#{current_line}\" with "
+        end
+        
+        current_line.gsub!(@orig_string, @new_string)
+        
+        if @verbose
+          print "\"#{current_line}\"...\n"
+        end
+      end
+    end
+    
+    if new_file_contents != File.readlines(file)
+      File.open(file, "w") {}
+      File.write(file, new_file_contents.join)
+      if @verbose
+        puts "Content in \"#{file}\" successfully replaced." if @occurrences
+      end
+    end
+  end
+end
+
+GRES.new(
+         ARGV[0],
+         ARGV[1],
+         ARGV[2]
+)

@@ -29,7 +29,7 @@ class GRES
     end
     
     if File.directory?(@path)
-      Find.find("#@path") do |file|
+      Find.find(@path) do |file|
         replace_lines_in file unless File.directory?(file)
       end
     else

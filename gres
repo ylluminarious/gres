@@ -21,8 +21,8 @@ class GRES
       @path               = second_arg.to_s
     end
     
-    @orig_string = substitution_string[1]
-    @new_string  = substitution_string[2]
+    @orig_string = substitution_string[1].to_s
+    @new_string  = substitution_string[2].to_s
     
     if @verbose
       puts "Replacing all occurrences of \"#@orig_string\" in \"#@path\"..."

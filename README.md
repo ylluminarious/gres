@@ -17,7 +17,7 @@ With `gres`, you just feed it a directory and it does the recursion for you (a l
 ``` sh
 $ mkdir tmp
 $ echo "foo" > tmp/file
-$ gres "\foo\bar" tmp
+$ gres "foo\bar" tmp
 $ cat tmp/file 
 bar
 ```

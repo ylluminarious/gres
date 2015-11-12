@@ -1,6 +1,6 @@
 # gres
 Globally search for a Regular Expression and Substitute
-## Why not use `sed`?
+## Why not just use `sed`?
 A couple of reasons that I made my own script instead of just using `sed`:
 * With `sed`, you have to manually iterate through a directory to replace a string of text. E.g.:
 ``` sh
@@ -17,7 +17,7 @@ With `gres`, you just feed it a directory and it does the recursion for you (a l
 ``` sh
 $ mkdir tmp
 $ echo "foo" > tmp/file
-$ gres "foo\bar" tmp
+$ gres "s/foo/bar/" tmp
 $ cat tmp/file 
 bar
 ```

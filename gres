@@ -3,7 +3,7 @@
 require 'find'
 
 # Globally search for a Regular Expression and Substitute
-class GRES
+class Gres
   def initialize(first_arg, second_arg, third_arg)
     
     flags = ["-v"]
@@ -74,7 +74,7 @@ class GRES
   end
 end
 
-GRES.new(
+Gres.new(
          ARGV[0],
          ARGV[1],
          ARGV[2]

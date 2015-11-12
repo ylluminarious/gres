@@ -6,11 +6,11 @@ require 'find'
 class Gres
   def initialize(first_arg, second_arg, third_arg)
     
-    flags = ["-v"]
+    options = ["-v"]
     
-    if flags.any? { |flag| first_arg[flag] }
-      substitution_string = second_arg.to_s.split("\\")
-      @path               = third_arg.to_s
+    if options.any? { |flag| first_arg[flag] }
+      parse_substitution_string.call(second_arg.to_s)
+      @path = third_arg.to_s
       
       case first_arg
       when "-v"

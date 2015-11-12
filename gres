@@ -40,7 +40,7 @@ class Gres
     
     options = ["-v"]
     
-    if options.any? { |flag| first_arg[flag] }
+    if options.any? { |option| first_arg[option] }
       parse_substitution_string.call(second_arg.to_s)
       @path = third_arg.to_s
       

@@ -26,7 +26,7 @@ tmp
 2 directories, 3 files
 $ find tmp -type f -exec sed -i "" "s/original string/new string/" {} \;
 ```
-^ I personally find that ugly and cumbersome, even though it handles the maxdepth problem. So, as you can see, recursively searching with `sed` sux, at least in my opinion.
+^ I personally find that cumbersome, even though it handles the maxdepth problem. So, as you can see, recursively searching with `sed` sux, at least in my opinion.
 * With `gres`, you just feed it a directory and it does the recursion for you (a la `grep`):
 ``` sh
 $ mkdir tmp

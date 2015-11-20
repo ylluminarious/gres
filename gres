@@ -5,43 +5,10 @@ require 'find'
 # Globally search for a Regular Expression and Substitute
 class Gres
   def initialize(first_arg, second_arg, third_arg)
-    parse_substitution_string = lambda do |string|
-      current_index         = 0
-      indexes_of_partitions = []
-      
-      string.each_char do |current_char|
-        prev_char = string[current_index - 1]
-        
-        if current_char == "/" && prev_char != "\\"
-          indexes_of_partitions << current_index
-        end
-        
-        current_index += 1
-      end
-      
-      sub_string_variable_names = ["@orig_string", "@new_string"]
-      partition_index           = 0
-      
-      sub_string_variable_names.each do |var_name|
-        opening_partition       = indexes_of_partitions[partition_index].to_i
-        closing_partition       = indexes_of_partitions[partition_index + 1].to_i
-        
-        sub_string              = string[opening_partition..closing_partition]
-        instance_variable_set   var_name, sub_string
-        sub_string_variable     = instance_variable_get(var_name)
-        
-        sub_string_variable.gsub! "\\/", "/"
-        sub_string_variable[0]  = ""
-        sub_string_variable[-1] = ""
-        
-        partition_index += 1
-      end
-    end
-    
     options = ["-v"]
     
     if options.any? { |option| first_arg[option] }
-      parse_substitution_string.call(second_arg.to_s)
+      parse second_arg.to_s
       @path = third_arg.to_s
       
       case first_arg
@@ -49,7 +16,7 @@ class Gres
         @verbose = true
       end
     else
-      parse_substitution_string.call(first_arg.to_s)
+      parse first_arg.to_s
       @path = second_arg.to_s
     end
     
@@ -70,6 +37,39 @@ class Gres
     end
   end
   
+  def parse(string)
+    current_index         = 0
+    indexes_of_partitions = []
+      
+    string.each_char do |current_char|
+      prev_char = string[current_index - 1]
+        
+      if current_char == "/" && prev_char != "\\"
+        indexes_of_partitions << current_index
+      end
+        
+      current_index += 1
+    end
+      
+    sub_string_names          = ["@orig_string", "@new_string"]
+    partition_index           = 0
+      
+    sub_string_names.each do |name|
+      opening_partition       = indexes_of_partitions[partition_index].to_i
+      closing_partition       = indexes_of_partitions[partition_index + 1].to_i
+        
+      sub_string              = string[opening_partition..closing_partition]
+      instance_variable_set   name, sub_string
+      sub_string_variable     = instance_variable_get(name)
+        
+      sub_string_variable.gsub! "\\/", "/"
+      sub_string_variable[0]  = ""
+      sub_string_variable[-1] = ""
+        
+      partition_index += 1
+    end
+  end
+  
   def replace_lines_in(file)
     new_file_contents = File.readlines(file)
     
@@ -85,7 +85,7 @@ class Gres
           print "Replacing line #{line_number}'s occurrence of \"#{current_line}\" with "
         end
         
-        current_line.gsub!(@orig_string, @new_string)
+        current_line.gsub! @orig_string, @new_string
         
         if @verbose
           print "\"#{current_line}\"...\n"

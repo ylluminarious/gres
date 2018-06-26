@@ -1,5 +1,17 @@
 # gres
-Globally search for a Regular Expression and Substitute
+Globally search for a String and Substitute
+
+A few things to note:
+- No, the acronym isn't quite right but it sounds better than `gss`.
+- We don't handle regexes on purpose; I often don't even want to use them at all and I find it very annoying to place backslashes everywhere when using `sed`.
+This may change in the future, but it also may not.
+- There is no distinction between replacing all occurences and the first occurence. I.e., **`gres` always replaces globally.**
+
+Options:
+- `-v` for verbose mode
+
+There is more commentary available at the top of the source file.
+
 ## Why not just use `sed`?
 A couple of reasons that I made my own script instead of just using `sed`:
 * With `sed`, you have to manually iterate through a directory to replace a string of text. E.g.:

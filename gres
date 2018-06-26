@@ -1,8 +1,27 @@
 #!/usr/bin/env ruby
 
+# License: BSD-3 Copyright (C) George Plymale II
+
+# Commentary:
+# Globally search for a String and Substitute
+#
+# No, the acronym isn't quite right but it sounds better than `gss'
+# We don't handle regexes on purpose; I often don't even want to use them at all
+# and I find it very annoying to place backslashes everywhere when using `sed'.
+# This may change in the future, but it also may not.
+#
+# Furthermore, the only option right now is -v, for verbose mode. There is no
+# distinction between replacing all occurences and the first occurence. I've
+# always used a real text editor when I want to replace just one occurrence of
+# something, so this tool is meant to always globally replace strings.
+#
+# Also, the choice of Ruby may be poor for performance when dealing with large
+# files. I haven't tested this on particularly large files and I haven't noticed
+# enough of a performance hit to irk me when I do use this. Maybe someday I'll
+# rewrite this in C instead, but for the time being Ruby will suffice.
+
 require 'find'
 
-# Globally search for a Regular Expression and Substitute
 class Gres
   def initialize(first_arg, second_arg, third_arg)
     options = ["-v"]
